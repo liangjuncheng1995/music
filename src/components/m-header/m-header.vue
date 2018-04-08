@@ -2,7 +2,7 @@
   <div class="m-header">
 	<div class="icon"></div>
 	<h1 class="text">Bilibili Music</h1>
-  </div>	
+  </div>
 </template>
 
 <script type="text/javascript">
@@ -14,7 +14,7 @@
 		position: relative;
 	    height: 44px;
 	    text-align: center;
-	    color: #ffcd32;
+	    color: #fb7299;
 	    font-size: 0;
 	}
 	.icon{
@@ -33,5 +33,5 @@
       line-height: 44px;
       font-size: 18px;
 	}
-	
+
 </style>

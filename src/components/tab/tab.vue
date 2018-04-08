@@ -5,13 +5,13 @@
     </router-link>
     <router-link tag="div" class="tab-item" to="/singer">
       <span class="tab-link">歌手</span>
-    </router-link> 
+    </router-link>
     <router-link tag="div" class="tab-item" to="/rank">
       <span class="tab-link">排行</span>
-    </router-link> 
+    </router-link>
     <router-link tag="div" class="tab-item" to="/search">
       <span class="tab-link">搜索</span>
-    </router-link>  
+    </router-link>
   </div>
 </template>
 
@@ -37,7 +37,7 @@
     color: rgba(255, 255, 255, 0.5);
   }
   .router-link-active .tab-link{
-    color: #ffcd32;
-    border-bottom: 2px solid #ffcd32;
+    color: #fb7299;
+    border-bottom: 2px solid #fb7299;
   }
 </style>

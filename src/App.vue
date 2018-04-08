@@ -2,7 +2,7 @@
   <div id="app">
     <m-header></m-header>
     <tab></tab>
-    <router-view></router-view> 
+    <router-view></router-view>
   </div>
 </template>
 
@@ -21,7 +21,7 @@
 <style>
 html,body{
   background: #222;
-  color: #ffcd32;
+  color: #fb7299;
 }
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
