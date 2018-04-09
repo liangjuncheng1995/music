@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 <template>
   <div class="recommend">
     <div class="recommend-content">
@@ -72,4 +70,3 @@
     color: #fb7299;
   }
 </style>
->>>>>>> dev
