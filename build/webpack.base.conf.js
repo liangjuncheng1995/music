@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-=======
+
 'use strict'
 const path = require('path')
 const utils = require('./utils')
@@ -86,4 +85,3 @@ module.exports = {
     child_process: 'empty'
   }
 }
->>>>>>> dev
