@@ -1,7 +1,7 @@
 <template>
   <div class="m-header">
-	<div class="icon"></div>
-	<h1 class="text">Bilibili Music</h1>
+	<div class="header-icon"></div>
+	<h1 class="header-text">Bilibili Music</h1>
   </div>
 </template>
 
@@ -17,7 +17,7 @@
 	    color: #fb7299;
 	    font-size: 0;
 	}
-	.icon{
+	.header-icon{
 	  display: inline-block;
       vertical-align: top;
       margin-top: 5px;
@@ -27,7 +27,7 @@
       background: url('logo@2x.png');
       background-size: 30px 32px;
 	}
-	.text{
+	.header-text{
 	  display: inline-block;
       vertical-align: top;
       line-height: 44px;

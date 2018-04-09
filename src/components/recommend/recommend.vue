@@ -1,35 +1,59 @@
 <template>
   <div class="recommend">
-    <div class="recommend-content">
-      <div v-if="recommends.length" class="slider-wrapper">
-        <slider>
-          <div v-for="item in recommends">
-            <a :href="item.linkUrl">
-              <img :src="item.picUrl">
-            </a>
-          </div>
-        </slider>
+    <scroll ref="scroll" class="recommend-content" :data="discList">
+      <div>
+        <div v-if="recommends.length" class="slider-wrapper">
+          <slider>
+            <div v-for="item in recommends">
+              <a :href="item.linkUrl">
+                <img class="needsclick" @load="loadImage" :src="item.picUrl">
+              </a>
+            </div>
+          </slider>
+        </div>
+        <div class="recommend-list">
+          <h1 class="list-title">热门歌单推荐</h1>
+          <ul>
+            <li v-for="item in discList" class="item">
+              <div class="icon">
+                <img width="60" height="60" v-lazy="item.imgurl" alt="">
+              </div>
+              <div class="text">
+                <h2 class="name" v-html="item.creator.name"></h2>
+                <p class="desc" v-html="item.dissname"></p>
+                <p class="desc"></p>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
-      <div class="recommend-list">
-        <h1 class="list-title">新歌推荐</h1>
-        <ul></ul>
+      <div class="loading-container" v-show="!discList.length">
+        <loading></loading>
       </div>
-    </div>
+    </scroll>
   </div>
 </template>
 
 <script type="text/javascript">
+  import Loading from 'base/loading/loading'
+  import Scroll from 'base/scroll/scroll'
   import Slider from 'base/slider/slider'
   import {getRecommend} from 'api/recommend'
+  import {getDiscList} from 'api/recommend'
   import {ERR_OK} from 'api/config'
   export default {
     data(){
       return{
-        recommends:[]
+        recommends:[],
+        discList:[]
       }
     },
     created(){
+      // setTimeout(() => {
+      //   this._getRecommend()
+      // },2000)
       this._getRecommend()
+      this._getDiscList()
     },
     methods:{
       _getRecommend(){
@@ -38,10 +62,26 @@
             this.recommends = res.data.slider
           }
         })
+      },
+      _getDiscList() {
+        getDiscList().then(res => {
+          if (res.code === ERR_OK) {
+            this.discList = res.data.list
+            // console.log(this.discList)
+          }
+        })
+      },
+      loadImage(){
+        if(!this.checkLoaded){
+          this.$refs.scroll.refresh()
+          this.checkLoaded = true
+        }
       }
     },
     components:{
-      Slider
+      Slider,
+      Scroll,
+      Loading
     }
   }
 </script>
@@ -69,4 +109,49 @@
     font-size: 14px;
     color: #fb7299;
   }
+
+
+  .list-title{
+    height: 65px;
+    line-height: 65px;
+    text-align: center;
+    font-size: 14px;
+    color: #fb7299;
+  }
+  .recommend-list  .item{
+    display: flex;
+    box-sizing: border-box;
+    align-items: center;
+    padding: 0 20px 20px 20px;
+  }
+  .item .icon{
+    flex: 0 0 60px;
+    width: 60px;
+    padding-right: 20px;
+  }
+   .item .text{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+    line-height: 20px;
+    overflow: hidden;
+    font-size: 14px;
+  }
+   .item .text .name{
+    margin-bottom: 10px;
+    color: #fff;
+  }
+   .item .text .desc{
+    color: rgba(255, 255, 255, 0.3);
+  }
+  .loading-container{
+      position: absolute;
+      width: 100%;
+      top: 50%;
+      transform: translateY(-50%);
+  }
+
+
+
 </style>

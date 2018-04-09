@@ -32,7 +32,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
   devServer: {
     before(app) {
       app.get('/api/getDiscList',function(req,res){
-        var url = 'https://c.y.qq.com/musichall/fcgi-bin/fcg_yqqhomepagerecommend.fcg'
+        var url = 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg'
         axios.get(url,{
           headers:{
             referer:'https://c.y.qq.com/',
