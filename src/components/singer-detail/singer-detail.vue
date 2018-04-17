@@ -4,7 +4,7 @@
   </transition>
 </template>
 
-<script>
+<script> 
   import {mapGetters} from 'vuex'
   import {getSingerDetail} from 'api/singer'
   import {ERR_OK} from 'api/config'

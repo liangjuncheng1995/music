@@ -125,7 +125,7 @@
   }
 </script>
 
-<style lang="css">
+<style lang="css" scoped="">
 .music-list{
   position: fixed;
   z-index: 100;
@@ -190,6 +190,7 @@
   vertical-align: middle;
   margin-right: 6px;
   font-size: 16px;
+  font-weight: bold;
 }
 .play-wrapper .play .text{
   display: inline-block;
