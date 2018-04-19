@@ -22,9 +22,16 @@
           </div>
         </div>
         <div class="bottom">
+          <div class="progress-wrapper">
+            <span class="time time-l">{{format(currentTime)}}</span>
+            <div class="progress-bar-wrapper">
+              <progress-bar :percent="percent" @percentChange="onProgressBarChange"></progress-bar>
+            </div>
+            <span class="time time-r">{{format(currentSong.duration)}}</span>
+          </div>
           <div class="operators">
-            <div class="icon1 i-left">
-              <i class="icon iconfont icon-shunxubofang"></i>
+            <div class="icon1 i-left" @click="changeMode">
+              <i :class="iconMode"></i>
             </div>
             <div class="icon1 i-left" :class="disableCls">
               <i @click="prev" class="icon iconfont icon-icon-1"></i>
@@ -52,14 +59,16 @@
           <p class="desc" v-html="currentSong.singer"></p>
         </div>
         <div class="control">
-          <i @click.stop="togglePlaying" :class="miniIcon" id="minizi"></i>
+          <progress-circle :radius="radius"  :percent="percent">
+            <i @click.stop="togglePlaying" class="icon-mini" :class="miniIcon" id="minizi"></i>
+          </progress-circle>
         </div>
         <div class="control">
           <i class="icon iconfont icon-liebiao"></i>
         </div>
       </div>
     </transition>
-    <audio ref="audio" source='' :src="currentSong.url" @canplay="ready" @error="error"></audio>
+    <audio ref="audio" source='' :src="currentSong.url" @canplay="ready" @error="error" @timeupdate="undateTime" @ended="end"></audio>
   </div>
 </template>
 
@@ -67,12 +76,18 @@
 import {mapGetters,mapMutations} from 'vuex'
 import animations from 'create-keyframe-animation'
 import {prefixStyle} from 'common/js/dom'
+import ProgressBar from 'base/progress-bar/progress-bar'
+import ProgressCircle from 'base/progress-circle/progress-circle'
+import {playMode} from 'common/js/config'
+import {shuffle} from 'common/js/util'
 
 const transform = prefixStyle('transform')
 export default {
   data() {
     return {
-      songReady:false
+      songReady:false,
+      currentTime : 0,
+      radius:32
     }
   },
   computed:{
@@ -82,18 +97,27 @@ export default {
     playIcon() {
       return this.playing? 'icon iconfont icon-zanting': 'icon iconfont icon-play'
     },
+    iconMode() {
+      return this.mode === playMode.sequence ? 'icon iconfont icon-shunxubofang' : this.mode === playMode.loop ? 'icon iconfont icon-danquxunhuan' :
+      'icon iconfont icon-suijibofang'
+    },
     miniIcon() {
       return this.playing? 'icon iconfont icon-zanting1': 'icon iconfont icon-play'
     },
     disableCls() {
       return this.songReady? '' : 'disable'
     },
+    percent() {
+      return this.currentTime / this.currentSong.duration
+    },
     ...mapGetters([
       'fullScreen',
       'playlist',
       'currentSong',
       'playing',
-      'currentIndex'
+      'currentIndex',
+      'mode',
+      'sequenceList'
     ])
   },
   methods:{
@@ -147,6 +171,17 @@ export default {
       }
       this.setPlayingState(!this.playing)
     },
+    end() {
+      if(this.mode === playMode.loop){
+        this.loop()
+      }else{
+        this.next()
+      }
+    },
+    loop() {
+      this.$refs.audio.currentTime = 0
+      this.$refs.audio.play()
+    },
     next() {
       if(!this.songReady){
         console.log('地址错误。请求不了播放歌曲的数据 下一首歌曲获取不了')
@@ -189,6 +224,47 @@ export default {
       this.songReady = true
       console.log('地址错误')
     },
+    undateTime(e) {
+      this.currentTime = e.target.currentTime
+    },
+    format(interval) {
+      interval = interval | 0
+      const minute = interval / 60 | 0
+      const second = this._pad(interval % 60)
+      return `${minute}:${second}`
+    },
+    onProgressBarChange(percent) {
+      this.$refs.audio.currentTime = this.currentSong.duration * percent
+      if(!this.playing) {
+        this.togglePlaying()
+      }
+    },
+    changeMode() {
+      const mode = (this.mode+1) % 3
+      this.setPlayMode(mode)
+      let list = null
+      if(mode === playMode.random) {
+        list = shuffle(this.sequenceList)
+      }else{
+        list = this.sequenceList
+      }
+      this._resetCurrentIndex(list)
+      this.setPlayList(list)
+    },
+    _resetCurrentIndex(list) {
+      let index = list.findIndex((item) => {
+        return item.id === this.currentSong.id
+      })
+      this.setCurrentIndex(index)
+    },
+    _pad(num, n = 2) {//补零操作
+      let len = num.toString().length
+      while(len<n){
+        num = '0' + num
+        len ++
+      }
+      return num
+    },
     _getPosAndScale() {
       const targetWidth = 40
       const paddingLeft = 40
@@ -207,14 +283,18 @@ export default {
     ...mapMutations({
       setFullScreen:'SET_FULL_SCREEN',
       setPlayingState:'SET_PLAYING_STATE',
-      setCurrentIndex:'SET_CURRENT_INDEX'
+      setCurrentIndex:'SET_CURRENT_INDEX',
+      setPlayMode:'SET_PLAY_MOOE',
+      setPlayList:'SET_PLAYLIST'
     })
   },
   watch: {
-    currentSong() {
+    currentSong(newSong,oldSong) {
+      if(newSong.id === oldSong.id){
+        return
+      }
       this.$nextTick(() => {
         this.$refs.audio.play()
-
       })
     },
     playing(newPlaying) {
@@ -223,6 +303,10 @@ export default {
         newPlaying?  audio.play() : audio.pause()
       })
     }
+  },
+  components:{
+    ProgressBar,
+    ProgressCircle
   }
 }
 </script>
@@ -240,12 +324,7 @@ export default {
 .normal-enter-active,.normal-leave-active{
   transition: all 0.4s
 }
-/* .normal-enter-active,.normal-leave-active .top{
-  transition: all 0.4s cubic-bezier(0.86, 0.18, 0.82, 1.32);
-}
-.normal-enter-active,.normal-leave-active .bottom{
-  transition: all 0.4s cubic-bezier(0.86, 0.18, 0.82, 1.32);
-} */
+
 /* 动画 */
 .normal-enter-active .top{
   transition: all 0.4s cubic-bezier(0.86, 0.18, 0.82, 1.32);
@@ -354,6 +433,32 @@ export default {
   bottom: 50px;
   width: 100%;
 }
+.normal-player .bottom .progress-wrapper{
+  display: flex;
+  align-items: center;
+  width: 80%;
+  margin: 0px auto;
+  padding: 10px 0;
+}
+.normal-player .bottom .progress-wrapper .time{
+  color: #fff;
+  font-size: 12px;
+  flex: 0 0 30px;
+  line-height: 30px;
+  width: 30px;
+}
+.normal-player .bottom .progress-wrapper .time-l{
+    text-align: left;
+}
+.normal-player .bottom .progress-wrapper .time-r{
+  text-align: right;
+}
+.normal-player .bottom .progress-wrapper .progress-bar-wrapper{
+  flex: 1;
+}
+
+
+
 .normal-player .bottom .dot-wrapper{
   text-align: center;
   font-size: 0;
@@ -434,7 +539,7 @@ export default {
   font-size: 30px;
 }
 #minizi{
-  font-size: 40px !important;
+  font-size: 32px !important;
 }
 .play{
   animation: rotate 20s linear infinite;
@@ -444,6 +549,11 @@ export default {
 }
 .disable{
   color: rgba(251, 114, 153, 0.5) !important
+}
+.icon-mini{
+  position: absolute;
+  left: 0.5px;
+  top: 0px;
 }
 
 @keyframes rotate{
