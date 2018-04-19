@@ -59,7 +59,7 @@
         </div>
       </div>
     </transition>
-    <audio ref="audio" :src="currentSong.url" @canplay="ready" @error="error"></audio>
+    <audio ref="audio" source='' :src="currentSong.url" @canplay="ready" @error="error"></audio>
   </div>
 </template>
 
