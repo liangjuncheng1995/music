@@ -3,7 +3,10 @@
 
 // hack for global nextTick
 
+function noop() {
+}
 
+window.MessageChannel = noop
 
 import 'babel-polyfill'
 import Vue from 'vue'
