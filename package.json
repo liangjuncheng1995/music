@@ -20,7 +20,8 @@
     "vue": "^2.5.2",
     "vue-lazyload": "^1.0.3",
     "vue-router": "^3.0.1",
-    "vuex": "^2.3.1"
+    "vuex": "^2.3.1",
+    "js-base64": "^2.1.9"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
