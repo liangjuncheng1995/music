@@ -44,9 +44,15 @@ export default {
   overflow: hidden;
 }
 .song-list .item .content .name{
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
   color: #fff;
 }
 .song-list .item .content .desc{
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
   margin-top: 4px;
   color: rgba(255, 255, 255, 0.3);
 }

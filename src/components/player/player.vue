@@ -504,6 +504,9 @@ export default {
   margin: 0 auto;
   line-height: 40px;
   text-align: center;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
   /* no-wrap() */
   font-size: 18px;
   color: #fff;
@@ -694,12 +697,16 @@ export default {
 }
 .mini-player .text .name{
   margin-bottom: 2px;
-  /* no-wrap() */
-  font-size: $font-size-medium;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 14px;
   color: #fff;
 }
 .mini-player .text .desc{
-  /* no-wrap() */
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
   font-size: 12px;
   color: rgba(255, 255, 255, 0.3);
 }
