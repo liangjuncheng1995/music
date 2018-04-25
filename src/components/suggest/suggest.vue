@@ -16,7 +16,7 @@
 <script>
   import {search} from 'api/search'
   import {ERR_OK} from 'api/config'
-  // import {filterString} from 'common/js/song'
+  import {filterString} from 'common/js/song'
 
   const TYPE_SINGER = 'singer'
 
@@ -56,7 +56,7 @@
         if(item.type === TYPE_SINGER) {
           return item.singername
         }else{
-          return `${item.songname}-${item.singer}`
+          return `${item.songname}-${filterString(item.singer)}`
         }
       },
       _genResult(data) {
