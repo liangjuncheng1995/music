@@ -166,7 +166,7 @@
   }
 </script>
 
-<style lang="css">
+<style lang="css" scoped="">
 .listview{
   position: relative;
   width: 100%;

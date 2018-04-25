@@ -104,7 +104,7 @@
   }
 </script>
 
-<style type="text/css">
+<style type="text/css" scoped="">
   .recommend{
     position: fixed;
     width: 100%;

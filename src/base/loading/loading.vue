@@ -16,7 +16,7 @@ export default {
 }
 </script>
 
-<style lang="css">
+<style lang="css" scoped="">
   .loading{
     width: 100%;
     text-align: center;
