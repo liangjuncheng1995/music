@@ -56,7 +56,9 @@ article, aside, details, figcaption, figure,
 footer, header, menu, nav, section {
     display: block;
 }
-
+input {
+  outline: none;
+}
 body {
     line-height: 1;
 }

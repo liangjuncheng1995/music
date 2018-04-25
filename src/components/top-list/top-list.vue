@@ -1,5 +1,5 @@
 <template lang="html">
-  <transition>
+  <transition name='slide'>
     <music-list :rank="rank" :title="title" :bg-image="bgImage" :songs="songs"></music-list>
   </transition>
 </template>
@@ -17,7 +17,10 @@
         return this.topList.topTitle
       },
       bgImage() {
-        return this.topList.picUrl
+        if(this.songs.length) {
+          return this.songs[0].image
+        }
+        return ''
       },
       ...mapGetters([
         'topList'
@@ -34,6 +37,10 @@
     },
     methods: {
       _getMusicList() {
+        if(!this.topList.id) {
+          this.$router.push('/rank')
+          return
+        }
         getMusicList(this.topList.id).then((res) => {
           if(res.code === ERR_OK){
             console.log(1)
@@ -45,7 +52,7 @@
         let ret = []
         list.forEach((item) => {
           const musicData = item.data
-          if(musicData.songid && musicData.albummid) {
+          if(musicData.songid && musicData.albumid) {
             ret.push(createSong(musicData))
           }
         })
