@@ -74,7 +74,7 @@
     mounted() {
       this.imageHeight = this.$refs.bgImage.clientHeight
       this.minTranslateY = -this.imageHeight + RESERVED_HEIGHT
-      this.$refs.list.$el.style.top = `${this.$refs.bgImage.clientHeight}px`
+      this.$refs.list.$el.style.top = `${this.imageHeight}px`
     },
     methods: {
       handlePlaylist(playlist) {
