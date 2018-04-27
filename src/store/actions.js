@@ -1,7 +1,7 @@
 import * as types from './mutation-types'
 import {playMode} from 'common/js/config'
 import {shuffle} from 'common/js/util'
-import {saveSearch} from 'common/js/cache'
+import {saveSearch,deleteSearch,clearSearch} from 'common/js/cache'
 
 function findIndex(list,song) {
   return list.findIndex((item) => {
@@ -49,7 +49,7 @@ export const insertSong = function ({commit,state},song) {
   if(fpIndex > -1) {
     //如果当前插入的序号大于列表中的序号
     if(currentIndex > fpIndex) {
-      playlist.split(fpIndex,1)
+      playlist.splice(fpIndex,1)
       currentIndex --
     }else{
       playlist.splice(fpIndex + 1,1)
@@ -78,4 +78,12 @@ export const insertSong = function ({commit,state},song) {
 
 export const saveSearchHistory = function ({commit},query) {
   commit(types.SET_SEARCH_HISTORY,saveSearch(query))
+}
+
+export const deleteSearchHistory = function({commit},query) {
+  commit(types.SET_SEARCH_HISTORY,deleteSearch(query))
+}
+
+export const clearSearchHistory = function ({commit}) {
+  commit(types.SET_SEARCH_HISTORY,clearSearch())
 }
