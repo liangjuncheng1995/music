@@ -1,7 +1,7 @@
 <template lang="html">
   <transition name="list-fade">
-    <div class="playlist">
-      <div class="list-wrapper">
+    <div class="playlist" v-show="showFlag" @click='hide'>
+      <div class="list-wrapper" @click.stop>
         <div class="list-header">
           <h1 class="title">
             <i class="icon1"></i>
@@ -9,27 +9,27 @@
             <span class="clear"><i class="icon iconfont icon-shanchu"></i></span>
           </h1>
         </div>
-        <div class="list-content">
-          <ul>
-            <li class="item">
-              <i class="current"></i>
-              <span class="text"></span>
+        <scroll ref="listContent" :data="sequenceList" class="list-content">
+          <transition-group name="list" tag="ul">
+            <li :key="item.id" ref="listItem" class="item" v-for="(item,index) in sequenceList" @click="selectItem(item,index)">
+              <i class="current" :class="getCurrentIcon(item)"></i>
+              <span class="text">{{item.name}}</span>
               <span class="like">
                 <i class="icon iconfont icon-favoriteoutline"></i>
               </span>
-              <span class="delete">
+              <span class="delete" @click.stop="deleteOne(item)">
                 <i class="icon iconfont icon-shachu-xue"></i>
               </span>
             </li>
-          </ul>
-        </div>
+          </transition-group>
+        </scroll>
         <div class="list-operate">
           <div class="add">
             <i class="icon iconfont icon-msnui-add-line"></i>
             <span class="text">添加歌曲列表</span>
           </div>
         </div>
-        <div class="list-close">
+        <div @click="hide" class="list-close">
           <span>关闭</span>
         </div>
       </div>
@@ -38,9 +38,81 @@
 </template>
 
 <script>
-export default {
-
-}
+  import {mapGetters,mapMutations,mapActions} from 'vuex'
+  import {playMode} from 'common/js/config'
+  import Scroll from 'base/scroll/scroll'
+  export default {
+    data() {
+      return {
+        showFlag:false
+      }
+    },
+    computed: {
+      ...mapGetters([
+        'sequenceList',
+        'currentSong',
+        'playlist',
+        'mode'
+      ])
+    },
+    methods: {
+      show() {
+        this.showFlag = true
+        setTimeout(() => {
+          this.$refs.listContent.refresh()
+          this.scrollToCurrent(this.currentSong)
+        },20)
+      },
+      hide() {
+        this.showFlag = false
+      },
+      getCurrentIcon(item) {
+        if(this.currentSong.id === item.id){
+          return 'icon iconfont icon-play'
+        }
+        return ''
+      },
+      selectItem(item,index) {
+        if(this.mode === playMode.random) {
+          index = this.playlist.findIndex((song) => {
+            return song.id === item.id
+          })
+        }
+        this.setCurrentIndex(index)
+        this.setPlayingState(true)
+      },
+      scrollToCurrent(current) {
+        const index = this.sequenceList.findIndex((song) => {
+          return current.id === song.id
+        })
+        this.$refs.listContent.scrollToElement(this.$refs.listItem[index], 300)
+      },
+      deleteOne(item) {
+        this.deleteSong(item)
+        if(!this.playlist.length){
+          this.hide()
+        }
+      },
+      ...mapMutations({
+        setCurrentIndex:'SET_CURRENT_INDEX',
+        setPlayingState: 'SET_PLAYING_STATE'
+      }),
+      ...mapActions([
+        'deleteSong'
+      ])
+    },
+    watch: {
+      currentSong(newSong,oldSong) {
+        if(!this.showFlag || newSong.id === oldSong.id){
+          return
+        }
+        this.scrollToCurrent(newSong)
+      }
+    },
+    components: {
+      Scroll
+    }
+  }
 </script>
 
 <style lang="css" scoped="">
@@ -125,7 +197,7 @@ export default {
   }
 
   .list-enter-active, .list-leave-active{
-    transition: all 0.1s;
+    transition: all 0.1s linear;
   }
   .list-enter, .list-leave-to{
     height: 0;
