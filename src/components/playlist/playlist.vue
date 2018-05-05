@@ -10,8 +10,8 @@
           </h1>
         </div>
         <scroll ref="listContent" :data="sequenceList" class="list-content">
-          <transition-group name="list" tag="ul">
-            <li :key="item.id" ref="listItem" class="item" v-for="(item,index) in sequenceList" @click="selectItem(item,index)">
+          <transition-group  tag="ul" name="list" >
+            <li class="item" v-for="(item,index) in sequenceList" :key="item.id" @click="selectItem(item,index)" ref="listItem">
               <i class="current" :class="getCurrentIcon(item)"></i>
               <span class="text">{{item.name}}</span>
               <span class="like">
@@ -196,10 +196,10 @@
     overflow: hidden;
   }
 
-  .list-enter-active, .list-leave-active{
+  .list-content .list-enter-active, .list-content .list-leave-active{
     transition: all 0.1s linear;
   }
-  .list-enter, .list-leave-to{
+  .list-content .list-enter, .list-content .list-leave-to{
     height: 0;
   }
   .list-content .item .current{
