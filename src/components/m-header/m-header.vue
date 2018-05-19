@@ -2,6 +2,9 @@
   <div class="m-header">
 	<div class="header-icon"></div>
 	<h1 class="header-text">Bilibili Music</h1>
+  <router-link to="/user" class="mine" tag="div">
+    <i class="icon iconfont icon-user"></i>
+  </router-link>
   </div>
 </template>
 
@@ -33,5 +36,19 @@
       line-height: 44px;
       font-size: 18px;
 	}
+  .mine{
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+  .icon-user{
+    display: block;
+    padding: 12px;
+    font-size: 20px;
+    color: #fb7299;
+  }
+
+
+
 
 </style>
