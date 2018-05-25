@@ -14,8 +14,8 @@
             <li class="item" v-for="(item,index) in sequenceList" :key="item.id" @click="selectItem(item,index)" ref="listItem">
               <i class="current" :class="getCurrentIcon(item)"></i>
               <span class="text">{{item.name}}</span>
-              <span class="like">
-                <i class="icon iconfont icon-favoriteoutline"></i>
+              <span @click.stop="toggleFavorite(item)" class="like">
+                <i class="icon iconfont" :class="getFavoriteIcon(item)"></i>
               </span>
               <span class="delete" @click.stop="deleteOne(item)">
                 <i class="icon iconfont icon-shachu-xue"></i>
@@ -24,7 +24,7 @@
           </transition-group>
         </scroll>
         <div class="list-operate">
-          <div class="add">
+          <div class="add" @click="addSong">
             <i class="icon iconfont icon-msnui-add-line"></i>
             <span class="text">添加歌曲列表</span>
           </div>
@@ -34,6 +34,7 @@
         </div>
       </div>
       <confirm ref="confirm" @confirm="confirmClear" text="是否清空播放列表" confirmBtnText="清空"></confirm>
+      <add-song ref="addSong"></add-song>
     </div>
   </transition>
 </template>
@@ -44,6 +45,7 @@
   import Scroll from 'base/scroll/scroll'
   import Confirm from 'base/confirm/confirm'
   import {playerMixin} from 'common/js/mixin'
+  import AddSong from 'components/add-song/add-song'
   export default {
     mixins: [playerMixin],
     data() {
@@ -101,7 +103,9 @@
       confirmClear() {
         this.deleteSongList()
       },
-
+      addSong() {
+        this.$refs.addSong.show()
+      },
       ...mapActions([
         'deleteSong',
         'deleteSongList'
@@ -117,7 +121,8 @@
     },
     components: {
       Scroll,
-      Confirm
+      Confirm,
+      AddSong
     }
   }
 </script>
@@ -262,7 +267,7 @@
   .list-operate .add{
     display: flex;
     align-items: center;
-    padding: 8px 16px;
+    padding: 8px 24px;
     border: 1px solid rgba(255, 255, 255, 0.5);
     border-radius: 100px;
     color: rgba(255, 255, 255, 0.5);
@@ -280,6 +285,9 @@
     background: #222;
     font-size: 16px;
     color: rgba(255, 255, 255, 0.5);
+  }
+  .icon-shoucang{
+    color: red;
   }
 
 

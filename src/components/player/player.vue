@@ -57,7 +57,7 @@
               <i @click="next" class="icon iconfont icon-icon-"></i>
             </div>
             <div class="icon1 i-right">
-              <i class="icon iconfont icon-favoriteoutline"></i>
+              <i class="icon iconfont" @click="toggleFavorite(currentSong)" :class="getFavoriteIcon(currentSong)"></i>
             </div>
           </div>
         </div>
@@ -738,6 +738,9 @@ export default {
   100%{
     transform: rotate(360deg)
   }
+}
+.icon-shoucang{
+  color: red;
 }
 
 
