@@ -57,7 +57,7 @@
               <i @click="next" class="icon iconfont icon-icon-"></i>
             </div>
             <div class="icon1 i-right">
-              <i class="icon iconfont icon-favoriteoutline"></i>
+              <i class="icon iconfont" @click="toggleFavorite(currentSong)" :class="getFavoriteIcon(currentSong)"></i>
             </div>
           </div>
         </div>
@@ -88,7 +88,7 @@
 </template>
 
 <script>
-import {mapGetters,mapMutations} from 'vuex'
+import {mapGetters,mapMutations,mapActions} from 'vuex'
 import animations from 'create-keyframe-animation'
 import {prefixStyle} from 'common/js/dom'
 import ProgressBar from 'base/progress-bar/progress-bar'
@@ -254,6 +254,7 @@ export default {
     },
     ready() {
       this.songReady = true
+      this.savePlayHistory(this.currentSong)
       console.log("歌曲地址获取正确")
     },
     error() {
@@ -390,8 +391,10 @@ export default {
     },
     ...mapMutations({
       setFullScreen:'SET_FULL_SCREEN'
-
-    })
+    }),
+    ...mapActions([
+      'savePlayHistory'
+    ])
   },
   watch: {
     currentSong(newSong,oldSong) {
@@ -738,6 +741,9 @@ export default {
   100%{
     transform: rotate(360deg)
   }
+}
+.icon-shoucang{
+  color: red;
 }
 
 

@@ -1,13 +1,13 @@
 <template lang="html">
   <div class="search-list" v-show="searches.length">
-    <ul>
-      <li @click="selectItem(item)" class="search-item" v-for='item in searches'>
+    <transition-group name="list" tag="ul">
+      <li :key="item" @click="selectItem(item)" class="search-item" v-for='item in searches'>
         <span class="text">{{item}}</span>
         <span class="icon1" @click.stop="deleteOne(item)">
           <i class="icon iconfont icon-shachu-xue"></i>
         </span>
       </li>
-    </ul>
+    </transition-group>
   </div>
 </template>
 
@@ -36,6 +36,12 @@
   align-items: center;
   height: 40px;
   overflow: hidden;
+}
+.search-list .list-enter-active, .search-list .list-leave-active{
+  transition:all 0.1s;
+}
+.search-list .list-enter,.search-list .list-leave-to{
+  height: 0;
 }
 .search-list .search-item .text{
   flex: 1;
