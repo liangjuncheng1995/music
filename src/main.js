@@ -13,6 +13,10 @@ import store from './store'
 import fastclick from 'fastclick'
 import VueLazyLoad from 'vue-lazyload'
 
+// 手机上的调试插件
+// import vConsole from 'vconsole'
+
+
 // fastclick.attach(document.boby)
 document.addEventListener('DOMContentLoaded', function() {
   if (window.FastClick) window.FastClick.attach(document.body);

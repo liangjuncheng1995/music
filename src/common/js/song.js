@@ -43,7 +43,8 @@ export function createSong(musicData){
     // url:`https://thirdparty.gting.com/${musicData.songid}.m4a?fromtag=38`
     // url:`http://thirdparty.gtimg.com/C100${musicData.songmid}.m4a?fromtag=38`//18-4-15播放地址
     url: `http://dl.stream.qqmusic.qq.com/C400${musicData.songmid}/${musicData.songid}.m4a?guid=263427534&fromtag=66`//18-4-19播放地址
-
+    //18-5-28播放地址
+    // url: `http://dl.stream.qqmusic.qq.com/C400${musicData.songmid}/${musicData.songid}.m4a?guid=2313974775&vkey=4089D067F5ABDCE1F6242A8E97EFF9F23BDF84E7CBF09F7BBC79C06025869C3405ED038D62BD842B27E4DDD8CBC994F0009B4818FAA5016A&uin=&fromtag=999`
   })
 }
 export function filterString(singer) {
